@@ -88,20 +88,20 @@ The `backend/llm_router` layer provides fault-tolerant inference across multiple
 - **Dynamic Model Allocation:** Allows individual agents to utilize specialized model configurations tuned for their specific reasoning complexity.
 
 ### Configuration via `.env`
-Fallback cascades are configured directly via comma-delimited `provider:model` strings in the environment configuration:
+Fallback cascades are configured directly via comma-delimited `provider:model` strings in `.env`. The router supports multiple inference providers (such as Groq, Google Gemini, and OpenRouter), where the exact model names can be customized and swapped depending on the operational scope, latency requirements, or reasoning depth needed (including larger models where appropriate):
 
 ```env
-# Primary classifier routing chain (Groq -> Gemini -> OpenRouter)
-ROUTER_CLASSIFIER_MODELS=groq:llama-3.3-70b-versatile,gemini:gemini-3.6-flash,openrouter:meta-llama/llama-3.3-70b-instruct
+# Primary classifier routing chain across inference providers
+ROUTER_CLASSIFIER_MODELS=groq:<model_name>,gemini:<model_name>,openrouter:<model_name>
 
 # Fast-path security filter routing chain
-ROUTER_GUARD_MODELS=groq:llama-3.1-8b-instant,gemini:gemini-3.6-flash,openrouter:meta-llama/llama-3.1-8b-instruct
+ROUTER_GUARD_MODELS=groq:<model_name>,gemini:<model_name>,openrouter:<model_name>
 
 # Executive report drafting chain
-ROUTER_REPORT_MODELS=groq:llama-3.3-70b-versatile,gemini:gemini-3.6-flash,openrouter:meta-llama/llama-3.3-70b-instruct
+ROUTER_REPORT_MODELS=groq:<model_name>,gemini:<model_name>,openrouter:<model_name>
 ```
 
-The router dynamically parses the chain, attempts inference on the primary endpoint, and seamlessly cascades to secondary models if an upstream failure occurs, recording all failover events in the database audit log.
+The router dynamically parses the chain, attempts inference on the primary provider, and seamlessly cascades to secondary providers if an upstream failure or rate limit occurs, recording all failover events in the database audit log. Model names can be scaled up or down per agent based on implementation needs.
 
 ---
 
@@ -202,7 +202,7 @@ cp .env.example .env
 | **LLM Providers** | `GROQ_API_KEY` | Optional* | Inference API key from [console.groq.com](https://console.groq.com). |
 | | `GOOGLE_API_KEY` | Optional* | Gemini API key from [aistudio.google.com](https://aistudio.google.com). Supports `gemini-3.6-flash`. |
 | | `OPENROUTER_KEY` | Optional* | OpenRouter gateway key from [openrouter.ai](https://openrouter.ai). |
-| **LLM Router Chains** | `ROUTER_*_MODELS` | Defaulted | Fallback cascades per agent, e.g. `groq:llama-3.3-70b-versatile,gemini:gemini-3.6-flash,openrouter:meta-llama/llama-3.3-70b-instruct`. |
+| **LLM Router Chains** | `ROUTER_*_MODELS` | Defaulted | Fallback cascades per agent, e.g. `groq:<model_name>,gemini:<model_name>,openrouter:<model_name>`. |
 | **Observability** | `LANGCHAIN_TRACING_V2` | Optional | Set `true` to trace agent execution graphs. |
 | | `LANGCHAIN_API_KEY` | Optional | Tracing API key from [smith.langchain.com](https://smith.langchain.com). *If left empty, tracing auto-disables to prevent 401 warnings.* |
 | | `OTEL_EXPORTER_OTLP_ENDPOINT`| Optional | Leave blank unless feeding an OpenTelemetry collector (Jaeger, Grafana Tempo). |

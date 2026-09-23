@@ -1,0 +1,7 @@
+§ 25a KWG: Besondere organisatorische Pflichten für Institute; Verordnungsermächtigung
+(1) Ein Institut muss über eine ordnungsgemäße Geschäftsorganisation verfügen, die die Einhaltung der vom Institut zu beachtenden gesetzlichen Bestimmungen und der aufsichtsrechtlichen Vorgaben gewährleistet. Die Geschäftsorganisation muss insbesondere ein angemessenes und wirksames Risikomanagement umfassen, auf dessen Grundlage das Institut die wesentlichen Risiken laufend identifiziert, beurteilt, steuert, überwacht und kommuniziert.
+Das Risikomanagement umfasst insbesondere:
+1. eine Festlegung von Strategien (Geschäfts- und Risikostrategie),
+2. Verfahren zur Ermittlung und Sicherstellung der Risikotragfähigkeit,
+3. eine interne Revision als unabhängiges Prüfungsorgan,
+4. eine angemessene IT- und Systeminfrastruktur, die den aufsichtlichen Anforderungen genügt.

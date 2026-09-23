@@ -1,0 +1,5 @@
+BaFin Leitfaden zu KI- und IKT-Risiken unter Berücksichtigung von DORA (Januar 2026)
+1. Der Einsatz von künstlicher Intelligenz in institutsinternen Prozessen unterliegt den allgemeinen Anforderungen an das Informations- und IKT-Risikomanagement nach DORA (Verordnung (EU) 2022/2554) sowie den MaRisk.
+2. KI-Modelle, die von Drittanbietern bezogen oder in der Cloud betrieben werden, sind als wesentliche IKT-Dienstleistungen einzustufen. Die Institute haben sicherzustellen, dass ausreichende Einsichts- und Prüfungsrechte vereinbart sind.
+3. Bei der Nutzung generativer KI-Modelle oder autonomer Agenten müssen technische Sicherheitsvorkehrungen gegen Prompt-Injection, Datenabfluss und Halluzinationen implementiert und regelmäßig auditiert werden.
+4. Es ist ein Notfallkonzept bereitzuhalten, das den Ausfall oder die fehlerhafte Funktion des KI-Systems durch manuelle Rückfallprozesse auffängt.

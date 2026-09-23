@@ -1,0 +1,9 @@
+Article 5: Prohibited Artificial Intelligence Practices
+1. The following artificial intelligence practices shall be prohibited:
+(a) the placing on the market, the putting into service or the use of an AI system that deploys subliminal techniques beyond a person's consciousness or purposefully manipulative or deceptive techniques, with the objective, or the effect of materially distorting the behaviour of a person or a group of persons by appreciably impairing their ability to make an informed decision;
+(b) the placing on the market, the putting into service or the use of an AI system that exploits any of the vulnerabilities of a natural person or a specific group of persons due to their age, disability or a specific social or economic situation;
+(c) the placing on the market, the putting into service or the use of AI systems for the evaluation or classification of natural persons or groups of persons over a certain period of time based on their social behaviour or known, inferred or predicted personal or personality characteristics, with the social score leading to either:
+(i) detrimental or unfavourable treatment of certain natural persons or groups of persons in social contexts that are unrelated to the contexts in which the data was originally generated or collected;
+(ii) detrimental or unfavourable treatment of certain natural persons or groups of persons that is unjustified or disproportionate to their social behaviour or its gravity;
+(d) the placing on the market, the putting into service or the use of AI systems for making risk assessments of natural persons in order to assess or predict the likelihood of a natural person committing a criminal offence based solely on profiling;
+(e) the placing on the market, the putting into service or the use of 'real-time' remote biometric identification systems in publicly accessible spaces for the purpose of law enforcement, unless strictly necessary for specific narrow exceptions.

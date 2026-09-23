@@ -1,0 +1,11 @@
+Article 6: Classification rules for high-risk AI systems
+1. Irrespective of whether an AI system is placed on the market or put into service independently from products referred to in Annex I, that AI system shall be considered high-risk where both of the following conditions are fulfilled:
+(a) the AI system is intended to be used as a safety component of a product, or the AI system is itself a product, covered by the Union harmonisation legislation listed in Annex I;
+(b) the product whose safety component pursuant to point (a) is the AI system, or the AI system itself as a product, is required to undergo a third-party conformity assessment.
+2. In addition to the high-risk AI systems referred to in paragraph 1, AI systems referred to in Annex III shall be considered high-risk.
+
+ANNEX III: HIGH-RISK AI SYSTEMS REFERRED TO IN ARTICLE 6(2)
+Point 5: Access to and enjoyment of essential private services and essential public services and benefits:
+(a) AI systems intended to be used by public authorities or on behalf of public authorities to evaluate the eligibility of natural persons for public assistance benefits and services, as well as to grant, reduce, revoke, or reclaim such benefits and services;
+(b) AI systems intended to be used to evaluate the creditworthiness of natural persons or establish their credit score, with the exception of AI systems used for the purpose of detecting financial fraud;
+(c) AI systems intended to be used for risk assessment and pricing in relation to natural persons in the case of life and health insurance.

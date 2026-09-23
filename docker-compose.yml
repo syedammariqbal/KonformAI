@@ -1,0 +1,83 @@
+services:
+  # ============================================================
+  # PostgreSQL 16 with PGVector Extension
+  # ============================================================
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: konformai_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: konform_user
+      POSTGRES_PASSWORD: konform_password
+      POSTGRES_DB: konformai
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U konform_user -d konformai"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ============================================================
+  # Knowledge Base Pre-Ingestion Service
+  # ============================================================
+  ingestion:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: konformai_ingestion
+    restart: "no"
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://konform_user:konform_password@db:5432/konformai
+    command: ["python", "scripts/ingest_kb.py"]
+
+  # ============================================================
+  # FastAPI Backend Engine
+  # ============================================================
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: konformai_backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      ingestion:
+        condition: service_completed_successfully
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://konform_user:konform_password@db:5432/konformai
+    command: ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+  # ============================================================
+  # Streamlit Frontend Dashboard
+  # ============================================================
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: konformai_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    environment:
+      API_BASE_URL: http://backend:8000/api/v1
+    command: ["streamlit", "run", "frontend/streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+
+volumes:
+  postgres_data:

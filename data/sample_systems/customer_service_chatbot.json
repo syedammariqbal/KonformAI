@@ -1,0 +1,8 @@
+{
+  "system_name": "KundenDialog AI — Retail Banking Virtual Assistant",
+  "system_description": "A customer-facing generative AI chatbot deployed on online and mobile banking interfaces to assist retail clients with general account queries, branch appointments, card blocking procedures, and generic product information. The model does not provide personalized investment advice or make lending decisions.",
+  "sector": "Retail Banking / Customer Support",
+  "expected_risk_tier": "limited",
+  "expected_articles": ["Article 50(1) (Transparency obligations to notify natural persons they are interacting with an AI system)"],
+  "bafin_relevance": ["BaFin BDAI Principle 1", "BaFin 2026 AI Guidance"]
+}

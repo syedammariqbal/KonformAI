@@ -1,0 +1,6 @@
+§ 63 WpHG: Allgemeine Verhaltensregeln; automatisierte Anlageberatung
+(1) Ein Wertpapierdienstleistungsunternehmen ist verpflichtet, Wertpapierdienstleistungen und Wertpapiernebendienstleistungen ehrlich, redlich und professionell im bestmöglichen Interesse seiner Kunden zu erbringen.
+(4) Bei automatisierter Anlageberatung (Robo-Advice) und automatisierten Portfolioverwaltungssystemen muss das Institut sicherstellen, dass die Algorithmen den Kundenprofilen, Anlagezielen und der Verlusttragfähigkeit des Kunden entsprechen.
+
+§ 80 WpHG: Organisationspflichten
+(1) Ein Wertpapierdienstleistungsunternehmen muss angemessene Grundsätze und Verfahren schaffen, um sicherzustellen, dass die gesetzlichen Pflichten eingehalten werden. Bei algorithmischem Handel und algorithmischer Kundenberatung sind Systeme zur Risikobegrenzung und Unterbrechung des automatisierten Prozesses (Notfallmechanismen) vorzuhalten.

@@ -1,0 +1,8 @@
+{
+  "system_name": "OptiWealth Algorithmic Robo-Advisor",
+  "system_description": "An automated investment advisory and portfolio management platform for retail banking customers in Germany. The platform collects online questionnaires to determine customer investment objectives and risk tolerance, and uses reinforcement learning algorithms to automatically execute ETF portfolio rebalancing without prior manual trade confirmation by human portfolio managers.",
+  "sector": "Wealth Management / Capital Markets",
+  "expected_risk_tier": "high",
+  "expected_articles": ["Article 6(2)", "Annex III"],
+  "bafin_relevance": ["WpHG § 63", "WpHG § 80", "BaFin BDAI Principles"]
+}

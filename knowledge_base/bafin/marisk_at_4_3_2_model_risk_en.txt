@@ -1,0 +1,5 @@
+BaFin MaRisk AT 4.3.2 Model Risk Management (Non-binding translation)
+Disclaimer: This English version is provided for information purposes only. The original German text is binding in all respects.
+1. Institutions must have appropriate processes for identifying, assessing, managing, monitoring, and communicating model risks (model risk management). This applies to all models used for risk measurement, credit decisions, pricing, and capital planning.
+2. The model lifecycle encompasses model initiation, development, validation, approval, implementation, ongoing monitoring, and decommissioning. Each phase must be documented.
+3. Prior to initial productive deployment and upon material changes, independent model validation must be performed, covering model conceptualization, statistical methodologies, data quality, backtesting, and sensitivity analysis.

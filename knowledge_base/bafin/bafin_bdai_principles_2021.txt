@@ -1,0 +1,5 @@
+BaFin Principles for the Use of Algorithms in Decision-Making Processes (BDAI 2021)
+Principle 1 (Clear Responsibilities): The management board bears overall responsibility for the use of algorithms in decision-making processes. Clear internal lines of responsibility and governance structures must be established.
+Principle 2 (Appropriate Human Oversight): Processes that make critical decisions affecting bank customers or risk exposure must have meaningful human oversight and clear escalation mechanisms.
+Principle 3 (Explainability and Traceability): Institutions must ensure an adequate level of explainability and traceability for algorithmic decisions. The rationale behind credit assessments and automated recommendations must be reconstructible by internal control functions and supervisors.
+Principle 4 (Data Quality and Bias Prevention): High data quality standards must be maintained across training, testing, and production data. Unintended discrimination and biased statistical correlation must be systematically mitigated.

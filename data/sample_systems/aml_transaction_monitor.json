@@ -1,0 +1,8 @@
+{
+  "system_name": "SentinelWatch AML Surveillance Engine",
+  "system_description": "A real-time machine learning transaction monitoring platform analyzing SWIFT and SEPA banking payments across 500,000 corporate and retail accounts. The neural network detects structuring, rapid fund movement, and cross-border anomalies, automatically filing Suspicious Activity Report (SAR) queues for human compliance investigator review.",
+  "sector": "Banking / Anti-Money Laundering",
+  "expected_risk_tier": "high",
+  "expected_articles": ["Article 6(2)", "Annex III Point 5(b) exception analysis"],
+  "bafin_relevance": ["KWG § 25a", "GwG § 25", "BaFin 2026 AI/ICT Guidance"]
+}

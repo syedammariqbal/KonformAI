@@ -1,0 +1,8 @@
+{
+  "system_name": "CrediScale AI — SME Underwriting Engine",
+  "system_description": "An automated credit evaluation model operated by a German commercial bank to assess creditworthiness and default probabilities for small and medium-sized enterprise (SME) loan applications up to 250,000 EUR. The model analyzes historical bank account transactions, financial statements, and director credit bureau scores. Loan recommendations above 50,000 EUR require human credit officer sign-off, while applications below 50,000 EUR are conditionally approved automatically.",
+  "sector": "Banking / SME Lending",
+  "expected_risk_tier": "high",
+  "expected_articles": ["Article 6(2)", "Annex III Point 5(b)"],
+  "bafin_relevance": ["MaRisk AT 4.3.2", "KWG § 25a"]
+}

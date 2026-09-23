@@ -1,0 +1,11 @@
+{
+  "system_name": "OmniTrust Social & Moral Credit Profiler",
+  "system_description": "An experimental algorithm that monitors natural persons across social networks, digital browsing habits, municipal payment timeliness, and interpersonal associations to assign a dynamic 'civic and financial trustworthiness score'. This score is utilized to automatically restrict or terminate access to checking accounts, commercial mortgage financing, and basic banking services in social contexts completely unrelated to the original data collection.",
+  "sector": "Retail Banking / Cross-Domain Profiling",
+  "expected_risk_tier": "prohibited",
+  "expected_articles": [
+    "Article 5(1)(c) - AI systems for the evaluation or classification of natural persons based on social behaviour leading to detrimental treatment in unrelated contexts"
+  ],
+  "bafin_relevance": ["KWG § 25a", "Unlawful discriminatory practice"],
+  "notes": "Deliberately designed to trigger the Article 5 prohibited-practice hard override and skip gap assessment."
+}

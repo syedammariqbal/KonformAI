@@ -1,0 +1,5 @@
+MaRisk AT 4.3.2 Modellrisikomanagement (Tz. 1 - 3)
+1. Die Institute müssen über angemessene Verfahren zur Identifizierung, Beurteilung, Steuerung sowie Überwachung und Kommunikation von Modellrisiken verfügen (Modellrisikomanagement). Dies gilt für alle quantitativen und qualitativen Modelle, insbesondere für Modelle zur Risikomessung, Kreditentscheidung, Preisgestaltung und Kapitalplanung.
+2. Der Modelllebenszyklus umfasst die Modellinitiierung, -entwicklung, -validierung, -abnahme, -anwendung, -überwachung und -außerbetriebnahme. Jede Phase ist angemessen zu dokumentieren.
+3. Vor dem ersten produktiven Einsatz sowie bei wesentlichen Modelländerungen ist eine unabhängige Modellvalidierung durchzuführen. Die Validierung umfasst die Prüfung der Modellkonzeption, der mathematisch-statistischen Verfahren, der Datenqualität und der Ergebnisgüte (einschließlich Backtesting und Sensitivitätsanalysen). Die Validierungseinheit muss organisatorisch von der Modellentwicklung unabhängig sein.
+Hinweis: Diese Fassung gibt das rechtsverbindliche deutsche Original wieder.

@@ -52,24 +52,106 @@
 
 ---
 
-## 🧠 Core Architectural Principles
+## 🤖 Multi-Agent Framework & Orchestration
 
-1. **Non-Linear LangGraph State Machine:** Dynamic routing with conditional edges, cycle loops, and feedback revisions — never a fixed linear pipeline.
-2. **Article 5 Hard Override Rule:** If an Article 5 prohibited practice (social scoring, subliminal manipulation, predictive criminal profiling) is identified, the graph immediately bypasses gap assessment and routes directly to the human review gate.
-3. **Critic/QA Agent with Circuit Breaker:** Verifies every statutory citation against authentic retrieved passage IDs. Enforces `MAX_CRITIC_RETRIES` (default 2) before escalating to human review.
-4. **Multilingual Hybrid RAG:**
-   - Dense semantic vector search via **PGVector** and **BAAI/bge-m3** (multilingual sentence embeddings).
-   - Separate **BM25 lexical indexes** maintained per language (`bm25_index_en`, `bm25_index_de`).
-   - Fused through LangChain's `EnsembleRetriever` (40% BM25, 60% dense vector weight).
-5. **Multi-Provider LLM Router with Fallbacks:**
-   - Per-agent primary model and two fallbacks defined in `.env` in `provider:model` syntax.
-   - Supported providers: **Groq**, **Google Gemini**, and **OpenRouter**.
-   - Automatic failover upon rate limits (429), timeouts, or API errors.
-   - `GLOBAL_DRY_RUN` switch enables zero-token testing with deterministic stubs.
-6. **Defense in Depth & Privacy:**
-   - Microsoft Presidio scans and redacts PII before any uploaded document is indexed.
-   - Regex pre-filter and semantic LLM defense intercept prompt injection attacks.
-7. **Human-in-the-Loop Gate:** All critical determinations and exports require explicit approval, logged to PostgreSQL.
+KonformAI implements an adaptive, non-linear multi-agent orchestration architecture powered by **LangGraph**. The workflow avoids brittle, linear pipelines by leveraging directed cyclical graphs with dynamic feedback edges, confidence checkpoints, and automated revision loops.
+
+### Agent Taxonomy & Roles
+
+The system organizes its agents into an orchestration supervisor and specialized functional agents, combining **deterministic programmatic agents** (for strict security, verification, and boundary compliance) and **LLM-based cognitive agents** (for regulatory interpretation, synthesis, and reasoning):
+
+| Sequence | Agent Name | Category | Execution Type | Primary Role & Responsibility |
+| :--- | :--- | :--- | :--- | :--- |
+| **0** | **Supervisor Orchestrator** | Orchestration | **Deterministic** | Manages the dynamic `StateGraph`, evaluates conditional edges, routes state between nodes, triggers parallel execution, and enforces human review checkpoints. |
+| **1** | **Intake Agent** | Ingestion & Structuring | **LLM-Based** | Parses unstructured system descriptions and user documents into a normalized schema (`system_purpose`, `affected_persons`, `decision_autonomy_level`, `data_types_used`). |
+| **2** | **Injection Sanitizer Agent** | Security Guardrail | **Deterministic + LLM Fallback** | Defends against adversarial jailbreaks, indirect prompt injection, and system override attempts. Triggers immediate hard termination upon malicious input detection. |
+| **3** | **PII Scan Agent** | Privacy & Security | **Deterministic** | Utilizes Microsoft Presidio and pattern recognition to detect and redact personally identifiable information (names, emails, German IBANs, phone numbers) prior to downstream processing. |
+| **4** | **EU AI Act Classifier Agent** | Legal Analysis | **LLM-Based** | Performs statutory risk classification against Regulation (EU) 2024/1689. Classifies systems into Prohibited (Art. 5), High-Risk (Art. 6 & Annex III), Limited-Risk (Art. 50), or Minimal-Risk, citing exact Articles. |
+| **5** | **BaFin Compliance Agent** | Supervisory Analysis | **LLM-Based** | Evaluates systems against German supervisory mandates: MaRisk AT 4.3.2 (model risk management), KWG § 25a (internal controls), WpHG requirements, and BaFin BDAI circulars. Runs concurrently with the EU Classifier. |
+| **6** | **Clarification Agent** | Human Interaction | **LLM-Based** | Triggered automatically when classification confidence falls below 0.60. Generates targeted technical questions to resolve statutory ambiguities. |
+| **7** | **Translation Agent** | Multilingual Processing | **LLM-Based** | Translates authentic German regulatory texts (KWG, MaRisk) into English for reporting, while appending mandatory legal disclaimers preserving German statutory primacy. |
+| **8** | **Conflict Resolution Agent** | Legal Synthesis | **LLM-Based** | Resolves tensions between EU-level standards and national supervisory circulars, establishing precedence hierarchies and unified compliance obligations. |
+| **9** | **Gap Assessment Agent** | Audit & Gap Analysis | **LLM-Based** | Cross-references regulatory requirements against user-provided internal controls to produce categorized, prioritized compliance gaps with concrete remediation steps. |
+| **10** | **Critic / QA Agent** | Verification & Grounding | **LLM-Based** | Independent auditor agent that cross-checks cited statutory articles against ingested knowledge base passages to eliminate hallucinations. Implements a retry circuit breaker (max 2 retries). |
+| **11** | **Report Drafting Agent** | Document Generation | **LLM-Based** | Synthesizes all agent outputs into a standardized, executive-ready compliance evaluation report. |
+| **12** | **Human-in-the-Loop Review Gate** | Governance & Sign-off | **Deterministic** | Enforces mandatory human oversight. Holds execution until a qualified compliance officer signs off, requests an agent revision, or rejects the assessment. |
+
+---
+
+## 🧭 Multi-Provider LLM Router Architecture
+
+The `backend/llm_router` layer provides fault-tolerant inference across multiple model providers without vendor lock-in.
+
+### Purpose and Aim
+- **High Availability:** Automatically falls back across provider backends (Groq $\rightarrow$ Google Gemini $\rightarrow$ OpenRouter) when encountering rate limits (HTTP 429), server timeouts, or context exhaustion.
+- **Provider Normalization:** Exposes a uniform asynchronous `complete()` interface returning a standardized `LLMResponse` dataclass with normalized token counts, latencies, and metadata.
+- **Dynamic Model Allocation:** Allows individual agents to utilize specialized model configurations tuned for their specific reasoning complexity.
+
+### Configuration via `.env`
+Fallback cascades are configured directly via comma-delimited `provider:model` strings in the environment configuration:
+
+```env
+# Primary classifier routing chain (Groq -> Gemini -> OpenRouter)
+ROUTER_CLASSIFIER_MODELS=groq:llama-3.3-70b-versatile,gemini:gemini-3.6-flash,openrouter:meta-llama/llama-3.3-70b-instruct
+
+# Fast-path security filter routing chain
+ROUTER_GUARD_MODELS=groq:llama-3.1-8b-instant,gemini:gemini-3.6-flash,openrouter:meta-llama/llama-3.1-8b-instruct
+
+# Executive report drafting chain
+ROUTER_REPORT_MODELS=groq:llama-3.3-70b-versatile,gemini:gemini-3.6-flash,openrouter:meta-llama/llama-3.3-70b-instruct
+```
+
+The router dynamically parses the chain, attempts inference on the primary endpoint, and seamlessly cascades to secondary models if an upstream failure occurs, recording all failover events in the database audit log.
+
+---
+
+## 🏗️ Functional Backend & Frontend Architecture
+
+KonformAI is organized into modular subsystems:
+
+```
+KonformAI/
+├── backend/
+│   ├── api/            # REST API endpoints & route controllers (FastAPI)
+│   ├── core/           # Configuration, security middleware, and logging setup
+│   ├── db/             # Database session lifecycle, ORM schemas, and migrations
+│   ├── llm_router/     # Multi-provider client abstraction & token management
+│   ├── rag/            # Multilingual hybrid retrieval engine (Dense + Lexical)
+│   ├── tools/          # External tool definitions & API integrations
+│   ├── agents/         # LangGraph state graph and specialized agent implementations
+│   └── observability/  # Audit logging, LangSmith tracing, and OpenTelemetry
+├── frontend/           # Multi-screen Streamlit compliance dashboard
+├── knowledge_base/     # Authoritative EU & German statutory documents
+├── data/               # Demonstration cases and evaluation fixtures
+└── scripts/            # Database initialization and automated ingestion utilities
+```
+
+### 1. Backend Core (`backend/core`)
+- **`config.py`**: Centralized Pydantic `Settings` handling environment variables, API keys, database URLs, token budgets, and per-agent router cascades.
+- **`security.py`**: API key dependency injection, cryptographic token hashing, rate-limiting, and request sanitization.
+- **`logging_config.py`**: Structured JSON logging formatters with contextual correlation IDs for request traceability.
+
+### 2. Database & Persistence Layer (`backend/db`)
+- **Dual-Engine Auto-Fallback**: Automatically detects whether PostgreSQL 16 is accessible via a rapid socket probe. If PostgreSQL is unavailable, it seamlessly initializes and persists to a local SQLite database (`konformai.db`), allowing deployment anywhere without database prerequisites.
+- **ORM Models (`models.py`)**: Defines schemas for `Case` records, `AuditLog` events, `LLMCallLog` metrics, `HumanReviewDecision` governance trails, and `KnowledgeBaseDocument` records.
+- **Alembic Migrations**: Fully configured database versioning under `backend/db/migrations/`.
+
+### 3. Retrieval-Augmented Generation (`backend/rag`)
+- **Hybrid Retrieval (`hybrid_retriever.py`)**: Combines dense semantic vector retrieval with language-specific lexical search using an inline Reciprocal Rank Fusion (RRF) algorithm (40% BM25, 60% dense vector weight).
+- **Multilingual Embeddings (`embeddings.py`)**: Employs BAAI/bge-m3 for dense multilingual representations across German and English legal terminology, with automated fallback handlers.
+- **Hierarchical Document Ingestion (`ingestion.py`)**: Splits legal texts along natural structural boundaries (Article, Paragraph, Section) to preserve complete statutory context.
+
+### 4. External Integrations & Tool Calling (`backend/tools`)
+- **EUR-Lex SPARQL Integration (`eurlex_tool.py`)**: Direct programmatic connection to the EU Publications Office CELLAR SPARQL endpoint to verify authoritative CELEX identifiers and statutory amendments.
+- **BaFin Registry Lookup Tool (`bafin_lookup_tool.py`)**: Validates supervised institution authorization statuses, banking categories (Vollbank, CRR-Kreditinstitut), and applicable supervisory obligations.
+- **Microsoft Presidio Tool (`presidio_tool.py`)**: PII detection and redaction engine enforcing data privacy before document embedding and processing.
+- **Security Notifier (`discord_notifier.py`)**: Automated webhook dispatch alerting security and compliance teams upon Article 5 violations or prompt injection attempts.
+
+### 5. Frontend Dashboard (`frontend/streamlit_app.py`)
+- **Screen 1 — Intake & Assessment**: Structured input forms, pre-loaded banking system templates, and document upload interfaces.
+- **Screen 2 — Human-in-the-Loop Review**: Granular review screens displaying risk determinations, statutory citations, gap tables, and interactive approval/revision buttons.
+- **Screen 3 — Knowledge Base Management**: File upload hub with integrated PII redaction and real-time vector re-indexing.
+- **Screen 4 — Observability & Audit Trail**: Real-time inspection of immutable audit events, token usage breakdowns, latency distributions, and LangSmith execution traces.
 
 ---
 
@@ -116,13 +198,13 @@ cp .env.example .env
 
 | Variable Group | Variable Name | Required? | Details & Guidance |
 | :--- | :--- | :--- | :--- |
-| **Execution Mode** | `GLOBAL_DRY_RUN` | **Yes** | Set to `false` for live real-world LLM calls, or `true` for instant zero-cost deterministic mock runs (perfect for offline testing and fast UI demos). |
-| **LLM Providers** | `GROQ_API_KEY` | Optional* | Fast inference API key from [console.groq.com](https://console.groq.com). |
+| **Execution Mode** | `GLOBAL_DRY_RUN` | **Yes** | Set to `false` for live real-world LLM calls, or `true` for deterministic offline testing and automated CI verification. |
+| **LLM Providers** | `GROQ_API_KEY` | Optional* | Inference API key from [console.groq.com](https://console.groq.com). |
 | | `GOOGLE_API_KEY` | Optional* | Gemini API key from [aistudio.google.com](https://aistudio.google.com). Supports `gemini-3.6-flash`. |
 | | `OPENROUTER_KEY` | Optional* | OpenRouter gateway key from [openrouter.ai](https://openrouter.ai). |
 | **LLM Router Chains** | `ROUTER_*_MODELS` | Defaulted | Fallback cascades per agent, e.g. `groq:llama-3.3-70b-versatile,gemini:gemini-3.6-flash,openrouter:meta-llama/llama-3.3-70b-instruct`. |
 | **Observability** | `LANGCHAIN_TRACING_V2` | Optional | Set `true` to trace agent execution graphs. |
-| | `LANGCHAIN_API_KEY` | Optional | Free personal API key from [smith.langchain.com](https://smith.langchain.com). *If left empty, tracing auto-disables to prevent 401 warnings.* |
+| | `LANGCHAIN_API_KEY` | Optional | Tracing API key from [smith.langchain.com](https://smith.langchain.com). *If left empty, tracing auto-disables to prevent 401 warnings.* |
 | | `OTEL_EXPORTER_OTLP_ENDPOINT`| Optional | Leave blank unless feeding an OpenTelemetry collector (Jaeger, Grafana Tempo). |
 | **Database** | `POSTGRES_SERVER`, etc. | Optional | PostgreSQL 16 + PGVector connection settings. *If PostgreSQL is not running, KonformAI automatically falls back to local SQLite (`konformai.db`).* |
 | **Integrations** | `DISCORD_WEBHOOK_URL` | Optional | Incoming webhook URL for security alerts (Article 5 prompt injections, critic circuit-breaker escalations). |

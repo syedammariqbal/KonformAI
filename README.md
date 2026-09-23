@@ -11,17 +11,14 @@
 
 ---
 
-## 📑 Final Deliverables Checklist (Spec Section 13)
+## 📑 Final Deliverables
 
 - [x] **UI functional (Streamlit):** 4-screen interactive dashboard (Intake, Human Review, KB Management, Observability).
 - [x] **FastAPI backend with secure handling:** Dependency injection, token validation, rate-limiting, and Alembic migrations.
 - [x] **LangGraph multi-agent orchestrator with conditional routing:** Dynamic conditional edges, Article 5 hard override, critic retry loop, and HITL gates.
 - [x] **At least 2 external tool/API integrations:** EUR-Lex CELLAR SPARQL endpoint, Discord Webhook notifier, Microsoft Presidio, and BaFin institution registry.
 - [x] **LangSmith + OpenTelemetry observability:** Context window tracking, per-call token accounting, daily token budget, and durable PostgreSQL audit trail.
-- [x] **Clean GitHub repo structure:** Pinned requirements, Dockerfile, docker-compose, CI workflow, and MIT License.
-- [ ] **Demo video link:** [Watch KonformAI Demo Walkthrough](https://drive.google.com/file/d/placeholder_demo_video/view?usp=sharing) *(Placeholder: Update after recording)*
-- [x] **Docker Hub image link:** `docker pull your-dockerhub-username/konformai:latest`
-- [ ] **All shared Google Drive assets set to "Anyone with the link" before submission.**
+- [x] **GitHub repo structure:** Pinned requirements, Dockerfile, docker-compose, CI workflow, and MIT License.
 
 ---
 

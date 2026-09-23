@@ -1,9 +1,11 @@
 """Vector store management supporting PostgreSQL PGVector with in-memory fallback."""
 
 import logging
-from typing import Any, List, Optional
+from typing import List, Optional
+
 from langchain_core.documents import Document
-from langchain_core.vectorstores import VectorStore, InMemoryVectorStore
+from langchain_core.vectorstores import InMemoryVectorStore, VectorStore
+
 from backend.core.config import settings
 from backend.rag.embeddings import embeddings_service
 
@@ -30,7 +32,7 @@ class VectorStoreManager:
             return self._store
 
         try:
-            from langchain_postgres import PGVectorStore, PGEngine
+            from langchain_postgres import PGEngine, PGVectorStore
 
             # Ensure URL has psycopg scheme
             conn_url = settings.DATABASE_URL

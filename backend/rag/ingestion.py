@@ -1,10 +1,10 @@
 """Regulatory knowledge base ingestion and legal chunking pipeline."""
 
 import logging
-import os
 import re
 from pathlib import Path
 from typing import Dict, List, Optional
+
 from langchain_core.documents import Document
 
 from backend.core.config import settings

@@ -5,7 +5,8 @@ Provides structured MCP-style interface for querying EU legislation by CELEX num
 
 import logging
 from datetime import datetime, timezone
-from typing import Any, Dict, Optional
+from typing import Optional
+
 import httpx
 from pydantic import BaseModel, Field
 

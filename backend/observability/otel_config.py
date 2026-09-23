@@ -3,7 +3,9 @@
 import logging
 from contextlib import contextmanager
 from typing import Generator
+
 from fastapi import FastAPI
+
 from backend.core.config import settings
 
 logger = logging.getLogger(__name__)

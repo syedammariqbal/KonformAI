@@ -1,6 +1,7 @@
 """Unit tests for the Hybrid RAG pipeline and multilingual retrieval."""
 
 from langchain_core.documents import Document
+
 from backend.rag.hybrid_retriever import hybrid_retriever
 from backend.rag.ingestion import split_legal_document
 

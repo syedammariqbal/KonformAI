@@ -1,8 +1,8 @@
 """Supervisor Agent Graph: Coordinates multi-agent compliance workflow with conditional edges."""
 
 import logging
-from typing import Any, Dict, List, Literal
-from langchain_core.messages import BaseMessage
+from typing import Any, Dict, Literal
+
 from langgraph.graph import END, START, StateGraph
 
 from backend.agents.bafin_compliance_agent import bafin_compliance_agent_node

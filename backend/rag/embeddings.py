@@ -2,7 +2,9 @@
 
 import logging
 from typing import List, Optional
+
 from langchain_core.embeddings import Embeddings
+
 from backend.core.config import settings
 
 logger = logging.getLogger(__name__)

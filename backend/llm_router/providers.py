@@ -8,8 +8,10 @@ import logging
 import time
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Optional
+
 import httpx
 from pydantic import BaseModel
+
 from backend.core.config import settings
 
 logger = logging.getLogger(__name__)

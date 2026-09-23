@@ -7,7 +7,8 @@ Hard-stops graph and alerts human via Discord on confirmed detection.
 import json
 import logging
 import re
-from typing import Any, Dict, List
+from typing import Any, Dict
+
 from backend.agents.state import GraphState
 from backend.llm_router.router import llm_router
 from backend.tools.discord_notifier import DiscordAlert, discord_notifier

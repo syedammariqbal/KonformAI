@@ -5,7 +5,7 @@ No os.getenv calls scattered elsewhere in the codebase.
 """
 
 from typing import List
-from pydantic import Field
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 

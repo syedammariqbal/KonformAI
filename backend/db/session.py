@@ -2,8 +2,10 @@
 
 import logging
 from typing import Generator
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
+
 from backend.core.config import settings
 from backend.db.models import Base
 

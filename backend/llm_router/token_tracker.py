@@ -2,7 +2,8 @@
 
 import logging
 from datetime import datetime, timezone
-from typing import Any, Dict, Optional, Tuple
+from typing import Dict, Optional, Tuple
+
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 

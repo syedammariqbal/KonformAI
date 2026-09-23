@@ -1,9 +1,9 @@
 """FastAPI routes for initiating compliance classifications and querying case status."""
 
-import asyncio
 import logging
 from typing import Any, Dict, List, Optional
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Security, status
+
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 from sqlalchemy import desc, select
 from sqlalchemy.orm import Session

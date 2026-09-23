@@ -1,6 +1,7 @@
 """Graph state definitions for KonformAI LangGraph orchestrator."""
 
 from typing import Any, Dict, List, Optional, TypedDict
+
 from pydantic import BaseModel, Field
 
 

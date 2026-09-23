@@ -1,11 +1,10 @@
 """FastAPI routes for knowledge base management and secure document uploads."""
 
 import logging
-import os
-import shutil
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-from fastapi import APIRouter, Depends, File, HTTPException, Security, UploadFile, status
+
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from pydantic import BaseModel
 from sqlalchemy import desc, select
 from sqlalchemy.orm import Session

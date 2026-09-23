@@ -3,14 +3,14 @@
 import uuid
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
+
 from sqlalchemy import (
+    JSON,
     Boolean,
-    Column,
     DateTime,
     Float,
     ForeignKey,
     Integer,
-    JSON,
     String,
     Text,
 )

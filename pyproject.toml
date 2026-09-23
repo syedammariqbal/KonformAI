@@ -39,4 +39,8 @@ select = [
 ignore = [
     "E501", # line too long (handled by formatter)
     "B008", # do not perform function calls in argument defaults (FastAPI Depends)
+    "E402", # module level import not at top of file (scripts sys.path adjustment)
+    "B904", # raise ... from err in except clause
+    "B905", # zip without strict parameter
+    "F841", # local variable assigned but never used
 ]

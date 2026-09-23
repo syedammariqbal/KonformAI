@@ -2,8 +2,10 @@
 
 import logging
 from typing import Optional
+
 import httpx
 from pydantic import BaseModel, Field
+
 from backend.core.config import settings
 
 logger = logging.getLogger(__name__)

@@ -27,53 +27,30 @@
 
 ## 🏛️ System Architecture
 
-```mermaid
-flowchart TD
-    User([Compliance Officer]) --> UI[Streamlit Frontend :8501]
-    UI --> API[FastAPI Backend :8000]
-
-    subgraph LangGraph Orchestrator
-        START([Start]) --> Intake[Intake Agent]
-        Intake --> Sanitizer{Injection Sanitizer}
-
-        Sanitizer -->|Prompt Injection Detected| Halt[Hard Halt & Discord Alert] --> END([End])
-        Sanitizer -->|Clean| PII[PII Scan Agent - Presidio]
-
-        PII --> FanOut[Parallel Dispatch]
-        FanOut --> EUClassifier[EU AI Act Classifier Agent]
-        FanOut --> BaFinAgent[BaFin Compliance Agent]
-
-        EUClassifier --> Join[Parallel Join]
-        BaFinAgent --> Join
-
-        Join --> ConfCheck{Confidence >= 0.60?}
-        ConfCheck -->|Low Confidence| Clarify[Clarification Agent] --> Intake
-
-        ConfCheck -->|Sufficient Confidence| ProhibCheck{Article 5 Prohibited?}
-        ProhibCheck -->|Yes - Hard Override| HumanGate[Human Review Gate]
-
-        ProhibCheck -->|No| TransCheck{German Passages?}
-        TransCheck -->|Yes| Translator[Translation Agent + Disclaimers] --> Conflict[Conflict Resolution Agent]
-        TransCheck -->|No| Conflict
-
-        Conflict --> Gap[Gap Assessment Agent]
-        Gap --> Critic{Critic / QA Agent}
-
-        Critic -->|Approved| Report[Report Drafting Agent]
-        Critic -->|Revise & Retries < 2| ReviseTarget[Route to Faulty Agent]
-        Critic -->|Exceeded Retries| HumanGate
-
-        Report --> HumanGate
-        HumanGate -->|Approve| Export[Export & Audit Agent] --> END
-        HumanGate -->|Edit| Report
-        HumanGate -->|Reject| END
-    end
-
-    API --> LangGraph Orchestrator
-    API --> DB[(PostgreSQL 16 + PGVector)]
-    API --> Discord[Discord Webhook]
-    API --> EURLex[EUR-Lex SPARQL API]
-    API --> LangSmith[LangSmith / OpenTelemetry]
+```text
+[ Compliance Officer ]
+        │
+        ▼
+[ Streamlit UI (:8501) ] ──▶ [ FastAPI Backend (:8000) ]
+                                    │
+    ┌───────────────────────────────┴───────────────────────────────┐
+    ▼                                                               ▼
+[ Ingestion & Presidio PII ]                          [ LangGraph Multi-Agent Engine ]
+    │                                                               │
+    ├─ Multi-Provider LLM Router (Groq / Gemini / OpenRouter)       ├─ 1. Intake Agent
+    ├─ EUR-Lex & BaFin Tool Lookups                                 ├─ 2. Injection Sanitizer (Hard Halt on prompt attack)
+    ├─ Hybrid RAG (PGVector / SQLite + BM25 Lexical)                ├─ 3. Presidio PII Scan Agent
+    └─ LangSmith & OpenTelemetry Observability                      ├─ 4. EU AI Act Classifier Agent
+                                                                    ├─ 5. BaFin Supervisory Agent
+                                                                    ├─ 6. Translation Agent (with legal disclaimers)
+                                                                    ├─ 7. Conflict Resolution Agent
+                                                                    ├─ 8. Gap Assessment Agent
+                                                                    ├─ 9. Critic / QA Verification Agent
+                                                                    ├─ 10. Report Drafting Agent
+                                                                    └─ 11. Human-in-the-Loop Approval Gate
+                                                                                    │
+                                                                                    ▼
+                                                                    [ Verified Compliance Report ]
 ```
 
 ---

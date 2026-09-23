@@ -234,20 +234,45 @@ ruff check .
 
 ---
 
-## 🐳 Docker Hub Publishing
+## 🐳 Docker Containerization & Hub Publishing
 
-To build and push your container image:
+KonformAI provides a **dual-mode deployment architecture** packaged inside a unified, production-grade multi-stage Docker container (`python:3.11-slim`):
+
+1. **Standalone All-in-One Container (`entrypoint.sh`):**
+   - Automatically initializes the database, ingests the regulatory knowledge base (`ingest_kb.py`), and seeds demo financial systems (`seed_demo_data.py`).
+   - Concurrently spawns the **FastAPI backend** (port `8000`) and the **Streamlit dashboard** (port `8501`).
+   - Uses SQLite auto-fallback so evaluators can test the entire stack with zero external database dependencies.
+2. **Multi-Container Compose (`docker-compose.yml`):**
+   - Coordinates separate services for **PostgreSQL 16 with PGVector (`db`)**, knowledge base ingestion (`ingestion`), FastAPI backend (`backend`), and Streamlit frontend (`frontend`).
+
+### 1. Building and Pushing to Docker Hub
 
 ```bash
 # 1. Login to Docker Hub
 docker login
 
-# 2. Build multi-stage production image
+# 2. Build multi-stage production image locally
 docker build -t your-dockerhub-username/konformai:latest .
 
-# 3. Push image to registry
+# 3. Push pre-built image to Docker Hub registry
 docker push your-dockerhub-username/konformai:latest
 ```
+
+### 2. Pulling and Running from Docker Hub (Evaluator Quickstart)
+
+Anyone on any machine (macOS, Windows, Linux) can run the full product with a single command:
+
+```bash
+# Pull the latest image
+docker pull your-dockerhub-username/konformai:latest
+
+# Run the unified stack (exposes UI on :8501 and API on :8000)
+docker run -d -p 8501:8501 -p 8000:8000 -e GLOBAL_DRY_RUN=true your-dockerhub-username/konformai:latest
+```
+
+Access the application immediately at:
+- **Streamlit Dashboard:** [http://localhost:8501](http://localhost:8501)
+- **FastAPI OpenAPI Docs:** [http://localhost:8000/docs](http://localhost:8000/docs)
 
 ---
 

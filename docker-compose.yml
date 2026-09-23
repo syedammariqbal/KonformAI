@@ -36,7 +36,7 @@ services:
       - .env
     environment:
       DATABASE_URL: postgresql+psycopg://konform_user:konform_password@db:5432/konformai
-    command: ["python", "scripts/ingest_kb.py"]
+    entrypoint: ["python", "scripts/ingest_kb.py"]
 
   # ============================================================
   # FastAPI Backend Engine
@@ -58,7 +58,7 @@ services:
       - .env
     environment:
       DATABASE_URL: postgresql+psycopg://konform_user:konform_password@db:5432/konformai
-    command: ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    entrypoint: ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
 
   # ============================================================
   # Streamlit Frontend Dashboard
@@ -77,7 +77,7 @@ services:
       - .env
     environment:
       API_BASE_URL: http://backend:8000/api/v1
-    command: ["streamlit", "run", "frontend/streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+    entrypoint: ["streamlit", "run", "frontend/streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0"]
 
 volumes:
   postgres_data:

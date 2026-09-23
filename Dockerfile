@@ -35,6 +35,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq5 \
     curl \
+    bash \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy installed Python packages from builder
@@ -43,7 +44,10 @@ COPY --from=builder /root/.local /root/.local
 # Copy application source tree
 COPY . /app
 
+# Ensure execution permissions on entrypoint script
+RUN chmod +x /app/entrypoint.sh
+
 EXPOSE 8000 8501
 
-# Default entrypoint starts the FastAPI backend
-CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Default entrypoint launches both FastAPI backend and Streamlit dashboard
+ENTRYPOINT ["/bin/bash", "/app/entrypoint.sh"]
